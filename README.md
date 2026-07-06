@@ -1,70 +1,132 @@
-# Travel Agency Web Application
+<div align="center">
 
-Welcome to the Travel Agency Web Application! This project provides a range of features to manage travel-related operations. Below are the key features:
+# 🚌 Highway Hoppers — Frontend
 
-### Forntend github : https://github.com/ImranHossain1/highway-hoppers-frontend
+**A modern bus ticket booking web app for travel across Bangladesh.**
 
-### Backend ginhub: https://github.com/ImranHossain1/highway-hoppers-backend
+Built with Next.js 16, React 19, Redux Toolkit & Ant Design — featuring interactive seat selection, role-based dashboards, profile management with image upload, and a searchable route finder.
 
-### Live Link : [https://highwayhoppers.vercel.app/home](https://highway-hoppers.vercel.app/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-RTK_Query-764ABC?logo=redux&logoColor=white)](https://redux-toolkit.js.org/)
+[![Ant Design](https://img.shields.io/badge/Ant_Design-5-0170FE?logo=antdesign&logoColor=white)](https://ant.design/)
 
-### Live Server: https://highway-hoppers-backend.vercel.app/api/v1
+**Live Site:** https://highway-hoppers-frontend.vercel.app &nbsp;·&nbsp; **API:** https://highway-hoppers-backend.onrender.com/api/v1
 
-### Authentication:
+</div>
 
-1. Admin Authentication:
+---
+
+## ✨ Features
+
+- **Route finder** — search by origin, destination and date across all 64 districts of Bangladesh
+- **Interactive seat map** — pick seats visually with live availability and instant fare totals
+- **Role-based dashboards** — tailored views for Admin, Driver and Traveller
+- **Profile management** — edit details and upload a profile photo
+- **Booking lifecycle** — book, confirm, cancel; view pending & completed journeys
+- **Ratings & reviews** — rate completed trips with a polished review flow
+- **Admin tools** — manage buses, drivers, schedules and bookings
+- **JWT auth** with automatic token refresh via Axios interceptors
+- **Responsive, themed UI** built on a cohesive design-token system
+
+## 🧱 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) · React 19 |
+| Language | TypeScript |
+| State / Data | Redux Toolkit · RTK Query |
+| UI | Ant Design 5 · CSS Modules |
+| Forms | React Hook Form · Yup |
+| HTTP | Axios (with auth interceptors) |
+| Auth | JWT (decoded client-side via `jwt-decode`) |
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20+
+- The [backend API](https://github.com/ImranHossain1/highway-hoppers-backend) running (locally or hosted)
+
+### Installation
 
 ```bash
-      email: imran@gmail.com
-      password: admin123
+# 1. Install dependencies
+npm install
+
+# 2. Configure environment
+echo 'NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1' > .env.local
+
+# 3. Start the dev server
+npm run dev
 ```
 
-## Key Features
+Open **http://localhost:3000**.
 
-1. **User Authentication:**
-   - Sign-up and sign-in functionality for users.
-2. **User Profile Management:**
-   - Users can easily update their profile information.
-3. **Driver Management:**
-   - Admins can create and update driver details, including their salary.
-4. **Bus Management:**
+## 🔐 Environment Variables
 
-   - Admins have the capability to create and update bus information.
-   - Bus details include bus number, total seats, and type.
+Create a `.env.local` file:
 
-5. **Bus Schedule Management:**
+| Variable | Description | Example |
+|---|---|---|
+| `NEXT_PUBLIC_API_BASE_URL` | Base URL of the backend API | `http://localhost:5000/api/v1` |
 
-   - Admins can manage bus schedules, including:
-     - Start and end times
-     - Dates
-     - Starting and ending points
-     - Day of the week
-     - Bus fare.
+> In production this points to the deployed backend, e.g. `https://highway-hoppers-backend.onrender.com/api/v1`.
 
-6. **User Booking:**
+## 📜 Scripts
 
-   - Users can book seats for journeys with ease.
-   - There's also a feature to complete pending bookings.
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Lint the codebase |
 
-7. **User Reviews:**
+## 🗂️ Project Structure
 
-   - Users have the ability to leave reviews and ratings for their journeys, providing valuable feedback.
+```
+src/
+├─ app/
+│  ├─ (public)/         # home, login, sign-up, book-now
+│  ├─ admin/            # admin dashboard (buses, drivers, schedules, bookings)
+│  ├─ driver/           # driver dashboard
+│  └─ user/             # traveller dashboard & bookings
+├─ components/
+│  ├─ Forms/            # reusable RHF form controls
+│  ├─ ui/               # shared UI (tables, modals, profile, search)
+│  └─ view/             # layout pieces (navbar, buttons)
+├─ redux/
+│  ├─ api/              # RTK Query endpoints
+│  └─ slices/           # local state slices
+├─ helpers/             # axios instance, config
+├─ services/            # auth service (token handling)
+└─ constants/           # static data (districts, options)
+```
 
-8. **Admin and Super Admin Roles:**
-   - Admins and super admins have specific permissions, allowing them to manage drivers, buses, bus schedules, and user bookings with precision.
+## 🔗 Key User Flows
 
-Please refer to the project documentation for more detailed information on each feature.
+- **Book a trip:** Home / Book Now → search route → pick a schedule → select seats → confirm
+- **Traveller:** view pending / completed bookings, rate journeys, edit profile
+- **Admin:** create & manage buses, drivers, schedules; review all bookings
+- **Driver:** view assigned schedules and received reviews
 
-## Getting Started
+## ☁️ Deployment
 
-To get started with this project, follow the installation and configuration steps in the project's [Getting Started](#getting-started) section.
+Deployed on **Vercel**.
 
-## Technologies Used
+1. Push to GitHub
+2. Vercel → **Add New Project** → import this repo
+3. Set `NEXT_PUBLIC_API_BASE_URL` to your backend URL (`.../api/v1`)
+4. Deploy
 
-- Next.js
-- React
-- Redux
-- Axios
-- Ant Design (for UI components)
-- Node.js (for the backend API)
-- Vercel (for deployment)
+> Ensure the backend's `CLIENT_SITE` env var is set to this frontend's URL so CORS allows requests.
+
+## 👤 Author
+
+**Md Imran Hossain**
+
+---
+
+<div align="center">
+<sub>Built with Next.js, React & Ant Design.</sub>
+</div>
