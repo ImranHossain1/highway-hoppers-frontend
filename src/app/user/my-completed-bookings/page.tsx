@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import UMTable from "@/components/ui/UMTable";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import ActionBar from "@/components/ui/ActionBar";
-import { Button, Col, Rate, Row, Space, Tooltip, message } from "antd";
+import { App, Button, Col, Rate, Row, Space, Tooltip } from "antd";
 import HHModal from "@/components/ui/HHModal";
 import TextArea from "antd/es/input/TextArea";
 import {
@@ -13,9 +13,14 @@ import {
   usePostReviewMutation,
   useUpdateReviewMutation,
 } from "@/redux/api/reviewApi";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ExclamationCircleFilled,
+} from "@ant-design/icons";
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const MyBookings = () => {
+  const { message } = App.useApp();
   const query: Record<string, any> = {};
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
@@ -61,7 +66,7 @@ const MyBookings = () => {
         message.error(res?.message);
       }
     } catch (err: any) {
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const updateUserReview = async () => {
@@ -85,7 +90,7 @@ const MyBookings = () => {
         message.error(res?.message);
       }
     } catch (err: any) {
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const deleteUserReview = async (id: any) => {
@@ -102,7 +107,7 @@ const MyBookings = () => {
         message.error(res?.message);
       }
     } catch (err: any) {
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   //console.log(data);
@@ -246,54 +251,109 @@ const MyBookings = () => {
             }}
           >
             {actionType === "delete" ? (
-              <p className="my-5">{modalMessage}</p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 14,
+                  alignItems: "flex-start",
+                  padding: "8px 0",
+                }}
+              >
+                <ExclamationCircleFilled
+                  style={{ color: "#faad14", fontSize: 24, marginTop: 2 }}
+                />
+                <div>
+                  <p style={{ fontWeight: 600, color: "var(--ink)", margin: 0 }}>
+                    {modalMessage || "Delete this review?"}
+                  </p>
+                  <p
+                    style={{
+                      color: "var(--muted)",
+                      margin: "4px 0 0",
+                      fontSize: 13,
+                    }}
+                  >
+                    This can’t be undone.
+                  </p>
+                </div>
+              </div>
             ) : (
-              <>
-                <Row gutter={{ xs: 24, xl: 8, lg: 8, md: 24 }}>
-                  <Col span={12} style={{ margin: "15px 0" }}>
+              (() => {
+                const isUpdate = actionType === "update";
+                const activeRating = isUpdate ? +updateRating : +rating;
+                const activeText = isUpdate ? updateReviewText : reviewText;
+                const setRate = isUpdate ? setUpdateRating : setRating;
+                const setText = isUpdate ? setUpdateReviewText : setReviewText;
+                return (
+                  <div style={{ padding: "4px 0 4px" }}>
+                    <p style={{ color: "var(--muted)", marginBottom: 18 }}>
+                      Share how your journey went. Your feedback helps other
+                      travellers and the driver.
+                    </p>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 8,
+                        padding: "18px",
+                        background: "var(--surface-2, #f4f8f7)",
+                        border: "1px solid var(--line, #e6ecec)",
+                        borderRadius: 12,
+                        marginBottom: 20,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: 12,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.06em",
+                          color: "var(--muted)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Your rating
+                      </span>
+                      <Rate
+                        tooltips={desc}
+                        onChange={setRate}
+                        value={activeRating}
+                        style={{ fontSize: 30 }}
+                      />
+                      <span
+                        style={{
+                          fontWeight: 600,
+                          color: "var(--brand, #218380)",
+                          minHeight: 20,
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {activeRating ? desc[activeRating - 1] : ""}
+                      </span>
+                    </div>
+
+                    <label
+                      style={{
+                        display: "block",
+                        fontWeight: 600,
+                        marginBottom: 6,
+                        color: "var(--ink, #12332f)",
+                      }}
+                    >
+                      Your review
+                    </label>
                     <TextArea
-                      placeholder="Tell us how we did that?"
-                      autoSize={{ minRows: 2, maxRows: 6 }}
-                      value={
-                        actionType === "post"
-                          ? reviewText
-                          : actionType === "update"
-                          ? updateReviewText
-                          : ""
-                      }
-                      onChange={(e) =>
-                        actionType === "post"
-                          ? setReviewText(e.target.value)
-                          : actionType === "update"
-                          ? setUpdateReviewText(e.target.value)
-                          : undefined
-                      }
+                      placeholder="Tell us about the comfort, punctuality, driver…"
+                      autoSize={{ minRows: 4, maxRows: 8 }}
+                      maxLength={500}
+                      showCount
+                      value={activeText}
+                      onChange={(e) => setText(e.target.value)}
                     />
-                  </Col>
-                </Row>
-                <Row gutter={{ xs: 24, xl: 8, lg: 8, md: 24 }}>
-                  <Space>
-                    <Rate
-                      tooltips={desc}
-                      onChange={
-                        actionType === "post"
-                          ? setRating
-                          : actionType === "update"
-                          ? setUpdateRating
-                          : undefined
-                      }
-                      value={
-                        actionType === "post"
-                          ? +rating
-                          : actionType === "update"
-                          ? +updateRating
-                          : undefined
-                      }
-                    />
-                    {rating ? <span>{desc[rating - 1]}</span> : ""}
-                  </Space>
-                </Row>
-              </>
+                  </div>
+                );
+              })()
             )}
           </HHModal>
         </>

@@ -6,10 +6,11 @@ import dayjs from "dayjs";
 import UMTable from "@/components/ui/UMTable";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import ActionBar from "@/components/ui/ActionBar";
-import { Button, Col, Input, Row, Select, Space, message } from "antd";
+import { App, Button, Col, Input, Row, Select, Space, Tag } from "antd";
 import { useDebounced } from "@/redux/hooks";
 import Link from "next/link";
 import {
+  ArrowRightOutlined,
   EditOutlined,
   ReloadOutlined,
   StepForwardOutlined,
@@ -35,6 +36,8 @@ const BusSchedules = () => {
   const [modalTitle, setModalTitle] = useState<string>("");
   const [scheduleId, setScheduleId] = useState<string>("");
   const [journeyStatus, setJourneyStatus] = useState<string>("");
+  const [currentStatus, setCurrentStatus] = useState<string>("");
+  const { message } = App.useApp();
 
   query["limit"] = size;
   query["page"] = page;
@@ -58,6 +61,8 @@ const BusSchedules = () => {
   const handleChange = (value: string) => {
     setJourneyStatus(value);
   };
+  const statusColor = (s: string) =>
+    s === "Upcoming" ? "blue" : s === "Ongoing" ? "gold" : "green";
   const ScheduleStatusChange = (value: string) => {
     setStatus(value);
   };
@@ -89,7 +94,7 @@ const BusSchedules = () => {
         message.error(res?.message);
       }
     } catch (err: any) {
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const filteredSchedules = schedules?.filter((schedule: any) => {
@@ -186,8 +191,9 @@ const BusSchedules = () => {
                 onClick={() => {
                   setOpen(true);
                   setScheduleId(data.id);
-                  setModalTitle("Update your review");
+                  setModalTitle("Update journey status");
                   setJourneyStatus(data.status);
+                  setCurrentStatus(data.status);
                 }}
                 type="primary"
                 style={{ margin: "0 5px", backgroundColor: "#218380" }}
@@ -293,19 +299,83 @@ const BusSchedules = () => {
         isOpen={open}
         closeModal={() => setOpen(false)}
         handleOk={() => updateScheduleStatus()}
+        showOkButton={journeyStatus !== currentStatus}
       >
-        <Row gutter={{ xs: 24, xl: 8, lg: 8, md: 24 }}>
-          <Col span={8} style={{ margin: "10px 0" }}>
-            <Space wrap>
-              <Select
-                defaultValue={journeyStatus}
-                style={{ width: 120 }}
-                onChange={handleChange}
-                options={busScheduleStatus}
-              />
-            </Space>
-          </Col>
-        </Row>
+        <div style={{ padding: "4px 0 8px" }}>
+          <p style={{ color: "var(--muted)", marginBottom: 18 }}>
+            Move this journey to its next stage. Passengers see the status you
+            set here.
+          </p>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              padding: "14px 16px",
+              background: "var(--surface-2, #f4f8f7)",
+              border: "1px solid var(--line, #e6ecec)",
+              borderRadius: 12,
+              marginBottom: 20,
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "var(--muted)",
+                  fontWeight: 600,
+                  marginBottom: 4,
+                }}
+              >
+                Current
+              </div>
+              <Tag color={statusColor(currentStatus)}>{currentStatus}</Tag>
+            </div>
+            <ArrowRightOutlined style={{ color: "var(--muted)" }} />
+            <div>
+              <div
+                style={{
+                  fontSize: 11,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "var(--muted)",
+                  fontWeight: 600,
+                  marginBottom: 4,
+                }}
+              >
+                New
+              </div>
+              {journeyStatus === currentStatus ? (
+                <span style={{ color: "var(--muted)", fontSize: 13 }}>
+                  — select below —
+                </span>
+              ) : (
+                <Tag color={statusColor(journeyStatus)}>{journeyStatus}</Tag>
+              )}
+            </div>
+          </div>
+
+          <label
+            style={{
+              display: "block",
+              fontWeight: 600,
+              marginBottom: 6,
+              color: "var(--ink, #12332f)",
+            }}
+          >
+            Change status to
+          </label>
+          <Select
+            value={journeyStatus}
+            style={{ width: "100%" }}
+            size="large"
+            onChange={handleChange}
+            options={busScheduleStatus}
+          />
+        </div>
       </HHModal>
     </div>
   );

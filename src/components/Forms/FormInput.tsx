@@ -2,6 +2,7 @@
 
 import { getErrorMessageByPropertyName } from "@/utils/schema-validators";
 import { Input } from "antd";
+import { ReactNode } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 interface IInput {
   name: string;
@@ -12,6 +13,7 @@ interface IInput {
   placeholder?: string;
   validation?: object;
   label?: string;
+  prefix?: ReactNode;
 }
 
 const FormInput = ({
@@ -23,6 +25,7 @@ const FormInput = ({
   placeholder,
   validation,
   label,
+  prefix,
 }: IInput) => {
   const {
     control,
@@ -41,6 +44,7 @@ const FormInput = ({
               type={type}
               size={size}
               placeholder={placeholder}
+              prefix={prefix}
               {...field}
               value={value ? value : field.value}
             />
@@ -49,6 +53,7 @@ const FormInput = ({
               type={type}
               size={size}
               placeholder={placeholder}
+              prefix={prefix}
               {...field}
               value={value ? value : field.value}
             />

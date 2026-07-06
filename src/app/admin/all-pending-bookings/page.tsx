@@ -9,12 +9,13 @@ import dayjs from "dayjs";
 import UMTable from "@/components/ui/UMTable";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import ActionBar from "@/components/ui/ActionBar";
-import { Button, Input, message } from "antd";
+import { App, Button, Input } from "antd";
 import { useDebounced } from "@/redux/hooks";
 import Link from "next/link";
 import { DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import HHModal from "@/components/ui/HHModal";
 const AllPendingBooking = () => {
+  const { message } = App.useApp();
   const query: Record<string, any> = {};
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);

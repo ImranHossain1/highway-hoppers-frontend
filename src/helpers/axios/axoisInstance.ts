@@ -37,7 +37,7 @@ instance.interceptors.response.use(
   },
   async function (error) {
     const config = error?.config;
-    if (error.response.data.message === "jwt expired" && !config?.sent) {
+    if (error?.response?.data?.message === "jwt expired" && !config?.sent) {
       config.sent = true;
       const response = await getNewAccessToken();
       const accessToken = response?.data?.data?.accessToken;
@@ -45,12 +45,9 @@ instance.interceptors.response.use(
       setToLocalStorage(authKey, accessToken);
       return instance(config);
     } else {
-      const responseObject: IGenericErrorResponse = {
-        statusCode: error,
-        message: error?.response?.data?.message || "Something went wrong",
-        errorMessages: error?.response?.data?.message,
-      };
-      return error.response;
+      // Reject so RTK Query's axiosBaseQuery catch returns a proper
+      // `{ error: ... }` shape instead of a malformed response object.
+      return Promise.reject(error);
     }
   }
 );

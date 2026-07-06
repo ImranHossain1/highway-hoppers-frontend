@@ -2,7 +2,7 @@
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import UMTable from "@/components/ui/UMTable";
 
-import { Button, Input, Radio, RadioChangeEvent, Select, message } from "antd";
+import { App, Button, Input, Radio, RadioChangeEvent, Select } from "antd";
 import Link from "next/link";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -16,6 +16,7 @@ import { useDebounced } from "@/redux/hooks";
 import { useBusListQuery } from "@/redux/api/busApi";
 import { Option } from "antd/es/mentions";
 const AllBus = () => {
+  const { message } = App.useApp();
   const query: Record<string, any> = {};
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);

@@ -1,6 +1,6 @@
 import Navbar from "../view/Navbar";
 
-const AuthorisedHeader = async ({
+const AuthorisedHeader = ({
   hasSider = false,
 }: {
   hasSider?: boolean;

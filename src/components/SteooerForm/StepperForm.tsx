@@ -1,6 +1,6 @@
 "use client";
 import React, { ReactElement, ReactNode, useEffect, useState } from "react";
-import { Button, message, Steps, theme } from "antd";
+import { App, Button, Steps, theme } from "antd";
 import { FormProvider, useForm } from "react-hook-form";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { useRouter } from "next/navigation";
@@ -16,6 +16,7 @@ interface IStepsProps {
   navigateLink?: string;
 }
 const StepperForm = ({ steps, submitHandler, navigateLink }: IStepsProps) => {
+  const { message } = App.useApp();
   const [current, setCurrent] = useState<number>(
     !!getFromLocalStorage("step")
       ? Number(JSON.parse(getFromLocalStorage("step") as string).step)

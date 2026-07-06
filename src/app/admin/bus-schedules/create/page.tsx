@@ -15,7 +15,7 @@ import {
   pointsOption,
 } from "@/constants/global";
 import { useAddScheduleMutation } from "@/redux/api/scheduleApi";
-import { Button, Col, Row, message } from "antd";
+import { App, Button, Col, Row } from "antd";
 import { useRouter } from "next/navigation";
 import { DatePicker, Space } from "antd";
 import FormDayPicker from "@/components/Forms/FormDayPicker";
@@ -23,6 +23,7 @@ import DriverField from "@/components/Forms/DriverField";
 import BusField from "@/components/Forms/BusField";
 
 const CreateSchedules = () => {
+  const { message } = App.useApp();
   const [addSchedule] = useAddScheduleMutation();
   const router = useRouter();
 
@@ -64,7 +65,7 @@ const CreateSchedules = () => {
       }
     } catch (err: any) {
       console.log(err);
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const handleBack = () => {

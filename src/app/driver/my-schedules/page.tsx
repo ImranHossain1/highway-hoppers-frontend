@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import UMTable from "@/components/ui/UMTable";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import ActionBar from "@/components/ui/ActionBar";
-import { Button, Col, Input, Row, Select, Space, message } from "antd";
+import { App, Button, Col, Input, Row, Select, Space } from "antd";
 import { useDebounced } from "@/redux/hooks";
 import Link from "next/link";
 import {
@@ -22,6 +22,7 @@ import {
 import { busScheduleStatus, pointsOption } from "@/constants/global";
 import HHModal from "@/components/ui/HHModal";
 const MySchedules = () => {
+  const { message } = App.useApp();
   const query: Record<string, any> = {};
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
@@ -90,7 +91,7 @@ const MySchedules = () => {
         message.error(res?.message);
       }
     } catch (err: any) {
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const filteredSchedules = schedules?.filter((schedule: any) => {

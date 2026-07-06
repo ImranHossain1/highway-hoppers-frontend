@@ -20,17 +20,19 @@ import {
   useSingleScheduleQuery,
   useUpdateScheduleMutation,
 } from "@/redux/api/scheduleApi";
-import { Button, Col, Row, message } from "antd";
+import { App, Button, Col, Row } from "antd";
 import { useRouter } from "next/navigation";
 import { DatePicker, Space } from "antd";
 import FormDayPicker from "@/components/Forms/FormDayPicker";
 import DriverField from "@/components/Forms/DriverField";
 import BusField from "@/components/Forms/BusField";
+import { use } from "react";
 type IDProps = {
-  params: any;
+  params: Promise<{ id: string }>;
 };
 const UpdateSchedule = ({ params }: IDProps) => {
-  const { id } = params;
+  const { message } = App.useApp();
+  const { id } = use(params);
   const router = useRouter();
   const { data, isLoading } = useSingleScheduleQuery(id);
   const scheduleData = data?.data;
@@ -56,7 +58,7 @@ const UpdateSchedule = ({ params }: IDProps) => {
       }
     } catch (err: any) {
       console.log(err);
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
 

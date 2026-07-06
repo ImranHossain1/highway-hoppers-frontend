@@ -1,13 +1,13 @@
 import AskButtons from "@/components/ui/Homepage/AskButtons";
-import Banner from "@/components/ui/Homepage/Banner";
+import CTA from "@/components/ui/Homepage/CTA";
 import Discover from "@/components/ui/Homepage/Discover";
-import Drivers from "@/components/ui/Homepage/Drivers";
+import Hero from "@/components/ui/Homepage/Hero";
 import Info from "@/components/ui/Homepage/Info";
+import PopularRoutes from "@/components/ui/Homepage/PopularRoutes";
 import Priorities from "@/components/ui/Homepage/Priorities";
+import Stats from "@/components/ui/Homepage/Stats";
 import SearchField from "@/components/ui/SearchField";
-import { Divider } from "antd";
-
-import React from "react";
+import styles from "@/components/ui/Homepage/home.module.css";
 
 const Home = () => {
   const searchParams = {
@@ -15,22 +15,32 @@ const Home = () => {
     endPoint: "",
     startDate: "",
   };
+
   return (
     <>
-      <Banner />
-      <SearchField searchParams={searchParams}></SearchField>
-      <Divider></Divider>
-      <Discover />
-      <Divider></Divider>
-      <Priorities />
-      <Divider></Divider>
-      <Info />
-      <Divider></Divider>
-      {/* <Drivers /> */}
-      <Divider></Divider>
+      <Hero />
 
+      <div className={styles.searchWrap}>
+        <div className="hh-container">
+          <div className={styles.searchCard}>
+            <div className={styles.searchHead}>
+              <div>
+                <h3>Find your bus</h3>
+                <p>Search live routes and book in seconds.</p>
+              </div>
+            </div>
+            <SearchField searchParams={searchParams} compact />
+          </div>
+        </div>
+      </div>
+
+      <Stats />
+      <Priorities />
+      <Discover />
+      <PopularRoutes />
+      <Info />
       <AskButtons />
-      <Divider></Divider>
+      <CTA />
     </>
   );
 };

@@ -19,7 +19,19 @@ export const scheduleApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.profile],
     }),
+    updateProfile: build.mutation({
+      query: (data) => ({
+        url: `${USER_PROFILE_API}/update-profile`,
+        method: "PATCH",
+        data,
+      }),
+      invalidatesTags: [tagTypes.profile],
+    }),
   }),
 });
 
-export const { useUserProfileQuery, useMyProfileQuery } = scheduleApi;
+export const {
+  useUserProfileQuery,
+  useMyProfileQuery,
+  useUpdateProfileMutation,
+} = scheduleApi;

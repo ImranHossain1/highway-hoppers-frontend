@@ -1,19 +1,7 @@
-import { Row, Space, Spin } from "antd";
+import { Spin } from "antd";
 
 const Loading = () => {
-  return (
-    <Row
-      justify="center"
-      align="middle"
-      style={{
-        height: "100vh",
-      }}
-    >
-      <Space>
-        <Spin tip="Loading" size="large"></Spin>
-      </Space>
-    </Row>
-  );
+  return <Spin fullscreen size="large" tip="Loading" />;
 };
 
 export default Loading;

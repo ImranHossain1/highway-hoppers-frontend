@@ -14,6 +14,13 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 import styles from "./navbar.module.css";
 
+const Login = dynamic(() => import("./Buttons/LoginButton"), { ssr: false });
+const Logout = dynamic(() => import("./Buttons/LogoutButton"), { ssr: false });
+const Dashboard = dynamic(() => import("./Buttons/DashboardButton"), {
+  ssr: false,
+});
+const Signup = dynamic(() => import("./Buttons/SignupButton"), { ssr: false });
+
 const Navbar = ({
   items,
   hasSider,
@@ -30,22 +37,28 @@ const Navbar = ({
   const pathname = usePathname();
   const [showFullHeader, setShowFullHeader] = useState(true); // Initially, show the full header
   const [open, setOpen] = useState(false);
-  const Login = dynamic(() => import("./Buttons/LoginButton"), { ssr: false });
-  const Logout = dynamic(() => import("./Buttons/LogoutButton"), {
-    ssr: false,
-  });
-  const Dashboard = dynamic(() => import("./Buttons/DashboardButton"), {
-    ssr: false,
-  });
-  const Signup = dynamic(() => import("./Buttons/SignupButton"), {
-    ssr: false,
-  });
 
   const logout = () => {
     removeUserInfo(authKey);
     setUserLoggedIn(false);
     router.push("/login");
   };
+
+  const menuItems = [
+    ...(items?.map((item) => ({
+      key: item.href,
+      label: <Link href={item.href}>{item.label}</Link>,
+    })) ?? []),
+    ...(userLoggedIn
+      ? [
+          { key: "/dashboard", label: <Dashboard /> },
+          { key: "/logout", label: <Logout onLogout={logout} /> },
+        ]
+      : [
+          { key: "/login", label: <Login /> },
+          { key: "/signup", label: <Signup /> },
+        ]),
+  ];
 
   const showDrawer = () => {
     setOpen(true);
@@ -101,32 +114,8 @@ const Navbar = ({
             mode="horizontal"
             selectedKeys={[pathname]}
             style={{ display: "block", background: colorBgLayout }}
-          >
-            {items?.map((item) => (
-              <Menu.Item key={item.href}>
-                <Link href={item.href}>{item.label}</Link>
-              </Menu.Item>
-            ))}
-            {userLoggedIn ? (
-              <>
-                <Menu.Item key="/dashboard">
-                  <Dashboard />
-                </Menu.Item>
-                <Menu.Item>
-                  <Logout onLogout={logout} />
-                </Menu.Item>
-              </>
-            ) : (
-              <>
-                <Menu.Item key="/login">
-                  <Login />
-                </Menu.Item>
-                <Menu.Item key="/signup">
-                  <Signup />
-                </Menu.Item>
-              </>
-            )}
-          </Menu>
+            items={menuItems}
+          />
         </Header>
       </div>
       <div className={styles.navbar2}>
@@ -162,38 +151,14 @@ const Navbar = ({
             title="Menu"
             placement="right"
             onClose={onClose}
-            visible={open}
+            open={open}
           >
             <Menu
               mode="vertical"
               selectedKeys={[pathname]}
               style={{ borderRight: 0 }}
-            >
-              {items?.map((item) => (
-                <Menu.Item key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </Menu.Item>
-              ))}
-              {userLoggedIn ? (
-                <>
-                  <Menu.Item key="/dashboard">
-                    <Dashboard />
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Logout onLogout={logout} />
-                  </Menu.Item>
-                </>
-              ) : (
-                <>
-                  <Menu.Item key="/dashboard">
-                    <Login />
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Signup />
-                  </Menu.Item>
-                </>
-              )}
-            </Menu>
+              items={menuItems}
+            />
           </Drawer>
         </Header>
       </div>

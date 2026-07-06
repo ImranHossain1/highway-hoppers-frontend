@@ -2,15 +2,10 @@
 
 import { Button } from "antd";
 import Link from "next/link";
-import {
-  ReloadOutlined,
-  EyeOutlined,
-  StepForwardOutlined,
-} from "@ant-design/icons";
+import { StepForwardOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useDebounced } from "@/redux/hooks";
 import UMTable from "@/components/ui/UMTable";
-import styles from "../ui/Homepage/homepage.module.css";
+import styles from "../ui/Homepage/home.module.css";
 import { useSchedulesQuery } from "@/redux/api/scheduleApi";
 
 type SearchOptions = {
@@ -63,9 +58,8 @@ const TableRow = ({ searchParams }: { searchParams?: SearchOptions }) => {
   }
 
   const { data, isLoading } = useSchedulesQuery({ ...query });
-  const schedules = data?.schedules;
-  const meta = data?.meta;
-  console.log(data);
+  const schedules = data?.schedules ?? [];
+  const total = data?.meta?.total ?? 0;
   const columns = [
     {
       title: "Start Point",
@@ -107,13 +101,11 @@ const TableRow = ({ searchParams }: { searchParams?: SearchOptions }) => {
       dataIndex: "id",
       render: function (data: any) {
         return (
-          <>
-            <Link href={`/book-now/${data}`}>
-              <Button type="primary">
-                <StepForwardOutlined />
-              </Button>
-            </Link>
-          </>
+          <Link href={`/book-now/${data}`}>
+            <Button type="primary">
+              Select <StepForwardOutlined />
+            </Button>
+          </Link>
         );
       },
     },
@@ -129,37 +121,30 @@ const TableRow = ({ searchParams }: { searchParams?: SearchOptions }) => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        className={styles.rawStyle}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "20px ",
-        }}
-      >
-        <h1 style={{ textAlign: "center", margin: "10px 0" }}>
-          Our Journey options
-        </h1>
-
-        <UMTable
-          loading={isLoading}
-          columns={columns}
-          dataSource={schedules}
-          pageSize={size}
-          total={meta?.total}
-          showSizeChanger={true}
-          onPaginationChange={onPaginationChange}
-          onTableChange={onTableChange}
-          showPagination={true}
-        />
+    <div className={styles.panel}>
+      <div className={styles.panelHead}>
+        <span className={styles.pIcon}>
+          <UnorderedListOutlined />
+        </span>
+        <div>
+          <h2>Available journeys</h2>
+          <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.9rem" }}>
+            {total ? `${total} trips found` : "Browse upcoming trips"}
+          </p>
+        </div>
       </div>
+
+      <UMTable
+        loading={isLoading}
+        columns={columns}
+        dataSource={schedules}
+        pageSize={size}
+        total={total}
+        showSizeChanger={true}
+        onPaginationChange={onPaginationChange}
+        onTableChange={onTableChange}
+        showPagination={true}
+      />
     </div>
   );
 };

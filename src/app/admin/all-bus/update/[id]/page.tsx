@@ -5,14 +5,15 @@ import FormSelectField from "@/components/Forms/FormSelectField";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import { busTypeOption } from "@/constants/global";
 import { useGetSingleBusQuery, useUpdateBusMutation } from "@/redux/api/busApi";
-import { Button, Col, Row, message } from "antd";
+import { App, Button, Col, Row } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 type IDProps = {
-  params: any;
+  params: Promise<{ id: string }>;
 };
 const UpdateBus = ({ params }: IDProps) => {
-  const { id } = params;
+  const { message } = App.useApp();
+  const { id } = React.use(params);
   const router = useRouter();
   const { data, isLoading } = useGetSingleBusQuery(id);
   const busData = data?.data;
@@ -48,7 +49,7 @@ const UpdateBus = ({ params }: IDProps) => {
       }
     } catch (err: any) {
       console.log(err);
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const handleBack = () => {

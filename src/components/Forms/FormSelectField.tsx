@@ -45,6 +45,14 @@ const FormSelectField = ({
             value={value}
             style={{ width: "100%" }}
             placeholder={placeholder}
+            showSearch
+            allowClear
+            optionFilterProp="label"
+            filterOption={(input, option) =>
+              String(option?.label ?? "")
+                .toLowerCase()
+                .includes(input.toLowerCase())
+            }
           />
         )}
       />

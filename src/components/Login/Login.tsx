@@ -1,7 +1,5 @@
 "use client";
-import { Button, Col, Divider, Row, message } from "antd";
-import loginImage from "../../assets/login-image.png";
-import Image from "next/image";
+import { App, Button, Checkbox } from "antd";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import { SubmitHandler } from "react-hook-form";
@@ -9,18 +7,35 @@ import { useUserLoginMutation } from "@/redux/api/authApi";
 import { storeUserInfo } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import styles from "../ui/Homepage/homepage.module.css";
+import { useState } from "react";
+import {
+  MailOutlined,
+  LockOutlined,
+  ArrowRightOutlined,
+  SafetyCertificateOutlined,
+  CheckOutlined,
+} from "@ant-design/icons";
+import styles from "../ui/auth.module.css";
+
 type FormValues = {
-  id: string;
+  email: string;
   password: string;
 };
 
-const LoginPage = () => {
-  const router = useRouter();
+const perks = [
+  "Book tickets across 60+ districts in seconds",
+  "Pick your seat and pay securely",
+  "Instant e-tickets and 24/7 support",
+];
 
+const LoginPage = () => {
+  const { message } = App.useApp();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [userLogin] = useUserLoginMutation();
 
   const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
+    setLoading(true);
     try {
       const res = await userLogin({ ...data }).unwrap();
       if (res?.success === true) {
@@ -31,78 +46,103 @@ const LoginPage = () => {
         message.error(res?.message);
       }
     } catch (err: any) {
-      console.log(err);
-      message.error(err);
+      message.error(err?.data?.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className={styles.loginPage}>
-      <div style={{ padding: "15px" }}>
-        <Image
-          className={styles.responsiveImage}
-          src={loginImage}
-          width={500}
-          height={500}
-          alt="login image"
-        />
-      </div>
-      <div style={{ padding: "15px" }}>
-        <h1
-          style={{
-            margin: "15px 0px",
-          }}
-        >
-          First login your account
-        </h1>
-        <div>
+    <div className={styles.wrap}>
+      <aside className={styles.brand}>
+        <div className={styles.brandTop}>
+          <span className={styles.logo}>
+            <SafetyCertificateOutlined />
+            Highway <span>Hoppers</span>
+          </span>
+        </div>
+        <div className={styles.brandMid}>
+          <h2>Welcome back, traveller.</h2>
+          <p>
+            Sign in to manage your bookings, track your bus and pick up right
+            where you left off.
+          </p>
+          <ul className={styles.brandList}>
+            {perks.map((p) => (
+              <li key={p}>
+                <span className={styles.tick}>
+                  <CheckOutlined />
+                </span>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className={styles.brandBottom}>
+          © {new Date().getFullYear()} Highway Hoppers. All rights reserved.
+        </div>
+      </aside>
+
+      <section className={styles.formSide}>
+        <div className={styles.card}>
+          <span className={styles.eyebrow}>Sign in</span>
+          <h1>Login to your account</h1>
+          <p className={styles.sub}>Enter your details to continue.</p>
+
           <Form submitHandler={onSubmit}>
-            <div>
+            <div className={styles.field}>
+              <div className={styles.fieldLabel}>
+                <MailOutlined /> Email address
+              </div>
               <FormInput
                 name="email"
                 type="email"
                 size="large"
-                label="User Email"
+                placeholder="you@example.com"
+                prefix={<MailOutlined style={{ color: "#9db3b0" }} />}
               />
             </div>
-            <div
-              style={{
-                margin: "15px 0px",
-              }}
-            >
+
+            <div className={styles.field}>
+              <div className={styles.fieldLabel}>
+                <LockOutlined /> Password
+              </div>
               <FormInput
                 name="password"
                 type="password"
                 size="large"
-                label="User Password"
+                placeholder="Enter your password"
+                prefix={<LockOutlined style={{ color: "#9db3b0" }} />}
               />
             </div>
-            <div style={{ textAlign: "center" }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "100%", color: "black" }}
-              >
-                Login
-              </Button>
-              <Divider plain>Do not have any account? </Divider>
-              <Link href="/sign-up" style={{ marginTop: "10px" }}>
-                <Button
-                  type="default"
-                  htmlType="submit"
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#2a9d8f",
-                    color: "white",
-                  }}
-                >
-                  Sign up
-                </Button>
+
+            <div className={styles.rowBetween}>
+              <Checkbox>Remember me</Checkbox>
+              <Link href="/login" className={styles.link}>
+                Forgot password?
               </Link>
             </div>
+
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={loading}
+              className={styles.submit}
+            >
+              Sign in <ArrowRightOutlined />
+            </Button>
           </Form>
+
+          <p className={styles.footNote}>
+            Don&apos;t have an account?{" "}
+            <Link href="/sign-up" className={styles.link}>
+              Create one
+            </Link>
+          </p>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

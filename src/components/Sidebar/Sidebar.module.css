@@ -1,6 +1,50 @@
 .sidebar {
     display: flex;
    }
+
+.profileHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 24px 12px 16px;
+  text-align: center;
+}
+.avatar,
+.avatarFallback {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(13, 59, 57, 0.15);
+}
+.avatarFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand);
+  color: #fff;
+  font-family: var(--font-sora), sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+.pName {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.2;
+}
+.pRole {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: rgba(33, 131, 128, 0.1);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
  .hamburger{
     display: none;
  }

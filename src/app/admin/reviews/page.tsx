@@ -6,13 +6,14 @@ import dayjs from "dayjs";
 import UMTable from "@/components/ui/UMTable";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import ActionBar from "@/components/ui/ActionBar";
-import { Button, Col, Input, Row, Select, Space, message } from "antd";
+import { App, Button, Col, Input, Row, Select, Space } from "antd";
 
 import { ReloadOutlined } from "@ant-design/icons";
 
 import { useGetAllReviewsQuery } from "@/redux/api/reviewApi";
 import { useDriverListQuery } from "@/redux/api/driverApi";
 const Reviews = () => {
+  const { message } = App.useApp();
   const query: Record<string, any> = {};
   const [size, setSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);

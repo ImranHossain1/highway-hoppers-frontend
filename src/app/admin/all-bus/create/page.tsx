@@ -1,6 +1,6 @@
 "use client";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
-import { Button, Col, Row, message } from "antd";
+import { App, Button, Col, Row } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { departmentSchema } from "@/schemas/department";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import FormSelectField from "@/components/Forms/FormSelectField";
 import { busTypeOption } from "@/constants/global";
 
 const CreateBus = () => {
+  const { message } = App.useApp();
   const [createBus] = useCreateBusMutation();
   const router = useRouter();
   const onSubmit = async (data: any) => {
@@ -25,7 +26,7 @@ const CreateBus = () => {
       }
     } catch (err: any) {
       console.log(err);
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const handleBack = () => {

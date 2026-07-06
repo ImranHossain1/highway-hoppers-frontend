@@ -8,10 +8,11 @@ import FormTextArea from "@/components/Forms/FormTextArea";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
 import { genderOptions } from "@/constants/global";
 import { useCreateDriverMutation } from "@/redux/api/driverApi";
-import { Button, Col, Row, message } from "antd";
+import { App, Button, Col, Row } from "antd";
 import { useRouter } from "next/navigation";
 
 const CreateDriver = () => {
+  const { message } = App.useApp();
   const [createDriver] = useCreateDriverMutation();
   const router = useRouter();
   const onSubmit = async (data: any) => {
@@ -26,7 +27,7 @@ const CreateDriver = () => {
       }
     } catch (err: any) {
       console.log(err);
-      message.error(err);
+      message.error(err?.data?.message || "Something went wrong");
     }
   };
   const handleBack = () => {

@@ -73,14 +73,14 @@ const AllBooking = () => {
       title: "Bus Number",
       dataIndex: "Bus_Sit",
       render: function (data: any) {
-        return data && data.sitNumber;
+        return data && data.bus.busNumber;
       },
     },
     {
       title: "Sit Number",
       dataIndex: "Bus_Sit",
       render: function (data: any) {
-        return data && data.bus.busNumber;
+        return data && data.sitNumber;
       },
     },
     {

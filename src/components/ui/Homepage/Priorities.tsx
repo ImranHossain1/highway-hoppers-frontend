@@ -1,119 +1,56 @@
-"use client";
 import React from "react";
-import { Col, Row } from "antd";
-import styles from "./homepage.module.css";
-
+import styles from "./home.module.css";
 import {
-  ApiOutlined,
-  HeartOutlined,
-  RightOutlined,
   SafetyOutlined,
   WifiOutlined,
+  GlobalOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 
+const features = [
+  {
+    icon: <SafetyOutlined />,
+    title: "Health & safety first",
+    text: "Sanitised coaches and trained crews keep every journey safe and worry-free.",
+  },
+  {
+    icon: <WifiOutlined />,
+    title: "Comfort on board",
+    text: "Reclining seats, free Wi-Fi, power outlets and on-board washrooms as standard.",
+  },
+  {
+    icon: <GlobalOutlined />,
+    title: "Largest network",
+    text: "Thousands of routes connecting cities and towns across all 60+ districts.",
+  },
+  {
+    icon: <ThunderboltOutlined />,
+    title: "Instant booking",
+    text: "Search, pick a seat and get your e-ticket in under a minute — no paperwork.",
+  },
+];
+
 const Priorities = () => (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-    }}
-  >
-    <Row className={styles.rawStyle}>
-      <Col xs={24} md={12} lg={6}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyItems: "center",
-            textAlign: "center",
-            margin: "20px 10px",
-          }}
-        >
-          <div>
-            <SafetyOutlined style={{ fontSize: 50, color: "#e9c46a" }} />
+  <section className="hh-section">
+    <div className="hh-container">
+      <div className={styles.secHead}>
+        <span className="hh-eyebrow">Why Highway Hoppers</span>
+        <h2 className="hh-h2">Built for a better journey</h2>
+        <p className="hh-lead">
+          Everything you need for a smooth ride, from booking to arrival.
+        </p>
+      </div>
+      <div className={styles.grid4}>
+        {features.map((f) => (
+          <div key={f.title} className={styles.featureCard}>
+            <div className={styles.iconChip}>{f.icon}</div>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
           </div>
-          <h3 style={{ color: "#218380" }}>Health and Safety</h3>
-          <p style={{ margin: "0 20px" }}>
-            Keep yourself and others safe while traveling with us.
-          </p>
-          <p style={{ color: "#218380" }}>
-            Learn More <RightOutlined />
-          </p>
-        </div>
-      </Col>
-      <Col xs={24} md={12} lg={6}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyItems: "center",
-            textAlign: "center",
-            margin: "20px 10px",
-          }}
-        >
-          <div>
-            <WifiOutlined style={{ fontSize: 50, color: "#e9c46a" }} />
-          </div>
-          <h3 style={{ color: "#218380" }}>Comfort on board</h3>
-          <p style={{ margin: "0 20px" }}>
-            Our buses are equipped with large and comfortable seats, a toilet,
-            Wi-Fi and power outlets.{" "}
-          </p>
-          <p style={{ color: "#218380", marginTop: "5px" }}>
-            Learn More <RightOutlined />
-          </p>
-        </div>
-      </Col>
-      <Col xs={24} md={12} lg={6}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyItems: "center",
-            textAlign: "center",
-            margin: "20px 10px",
-          }}
-        >
-          <div>
-            <ApiOutlined style={{ fontSize: 50, color: "#e9c46a" }} />
-          </div>
-          <h3 style={{ color: "#218380" }}>
-            Largest bus network in Bangladesh
-          </h3>
-          <p style={{ margin: "0 20px" }}>
-            Choose from over 3,000 travel destinations in 40+ countries and
-            discover Europe with FlixBus.{" "}
-          </p>
-          <p style={{ color: "#218380", marginTop: "5px" }}>
-            Our route network <RightOutlined />
-          </p>
-        </div>
-      </Col>
-      <Col xs={24} md={12} lg={6}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyItems: "center",
-            textAlign: "center",
-            margin: "20px 10px",
-          }}
-        >
-          <div>
-            <HeartOutlined style={{ fontSize: 50, color: "#e9c46a" }} />
-          </div>
-          <h3 style={{ color: "#218380" }}>Travel environmentally-friendly</h3>
-          <p style={{ margin: "0 20px" }}>
-            Our efficient coaches are proven to have an excellent carbon
-            footprint per driven passenger-kilometer.
-          </p>
-          <p style={{ color: "#218380" }}>
-            Bus travel and environment <RightOutlined />
-          </p>
-        </div>
-      </Col>
-    </Row>
-  </div>
+        ))}
+      </div>
+    </div>
+  </section>
 );
 
 export default Priorities;

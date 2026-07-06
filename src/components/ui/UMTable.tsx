@@ -39,6 +39,7 @@ const UMTable = ({
       loading={loading}
       columns={columns}
       dataSource={dataSource}
+      rowKey={(record: any) => record?.id ?? record?._id}
       pagination={paginationConfig}
       onChange={onTableChange}
     />

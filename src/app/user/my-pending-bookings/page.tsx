@@ -9,13 +9,14 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import UMTable from "@/components/ui/UMTable";
 import UMBreadCrumb from "@/components/ui/HHBreadCrumb";
-import { Button, message } from "antd";
+import { App, Button } from "antd";
 import Link from "next/link";
 import ActionBar from "@/components/ui/ActionBar";
 import HHModal from "@/components/ui/HHModal";
 import { DeleteColumnOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const MyPendingBookings = () => {
+  const { message } = App.useApp();
   const query: Record<string, any> = {};
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
@@ -27,8 +28,12 @@ const MyPendingBookings = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  const { data, isLoading } = useGetUserPendingBookingsQuery({});
+  const { data, isLoading, error } = useGetUserPendingBookingsQuery({});
   const pendingData: any = data?.data?.data;
+  const emptyMessage =
+    (error as any)?.data?.message ||
+    data?.message ||
+    "You don't have any pending bookings.";
   const [confirmBooking] = useConfirmBookingMutation();
   const [cancelSingleBooking] = useCancelSingleBookingMutation();
   const [cancelBooking] = useCancelBookingMutation();
@@ -179,7 +184,7 @@ const MyPendingBookings = () => {
       </ActionBar>
       {!data?.success ? (
         <p style={{ marginTop: "10px", fontWeight: "700", color: "red" }}>
-          {data?.message}
+          {emptyMessage}
         </p>
       ) : (
         <>
